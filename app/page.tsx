@@ -16,6 +16,10 @@ export default async function Home() {
     next: { revalidate: 10 },
   });
 
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
   let data: IData = await response.json();
 
   return (
