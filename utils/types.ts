@@ -21,9 +21,9 @@ export interface ISong {
 }
 
 export interface IContextPlayer {
-  setSong: (song: ISong) => void;
+  setSong?: (song: ISong) => void;
 }
 
 export interface IContextJoin {
-  setShow: (value: boolean) => void;
+  setShow?: (value: boolean) => void;
 }

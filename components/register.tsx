@@ -1,5 +1,12 @@
-export const Register = () => {
-  return <div>register</div>;
-};
-
-export default Register;
+export default function Register({
+  toggle,
+}: {
+  toggle: (value: boolean) => void;
+}) {
+  return (
+    <div>
+      register
+      <button onClick={() => toggle(true)}>toggle</button>
+    </div>
+  );
+}

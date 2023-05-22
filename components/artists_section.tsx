@@ -8,7 +8,7 @@ interface Prop {
   title: String;
   data: IArtist[];
 }
-function ArtistsSection({ title, data }: Prop) {
+export default function ArtistsSection({ title, data }: Prop) {
   return (
     <section className="mt-10">
       <h5 className="text-white font-bold text-2xl mb-8">{title}</h5>
@@ -24,5 +24,3 @@ function ArtistsSection({ title, data }: Prop) {
     </section>
   );
 }
-
-export default ArtistsSection;

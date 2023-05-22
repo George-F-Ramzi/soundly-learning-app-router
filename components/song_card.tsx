@@ -4,10 +4,10 @@ import { useContext } from "react";
 import { RiPlayCircleFill } from "react-icons/ri";
 import Link from "next/link";
 import { IContextPlayer, ISong } from "@/utils/types";
-import { PlayerContext } from "./player";
 import Image from "next/image";
+import PlayerContext from "@/utils/player_context";
 
-function SongCard({ data }: { data: ISong }) {
+export default function SongCard({ data }: { data: ISong }) {
   const { setSong }: IContextPlayer = useContext(PlayerContext);
 
   return (
@@ -44,5 +44,3 @@ function SongCard({ data }: { data: ISong }) {
     </div>
   );
 }
-
-export default SongCard;

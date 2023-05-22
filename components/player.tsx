@@ -1,17 +1,15 @@
 "use client";
 
-import { Context, ReactNode, createContext, useState } from "react";
+import { ReactNode, useState } from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import Image from "next/image";
 import Link from "next/link";
-import { IContextPlayer, ISong } from "@/utils/types";
+import { ISong } from "@/utils/types";
+import PlayerContext from "@/utils/player_context";
 
-export let PlayerContext: Context<IContextPlayer>;
-
-function Player({ children }: { children: ReactNode }) {
+export default function Player({ children }: { children: ReactNode }) {
   const [song, setSong] = useState<ISong>();
-  PlayerContext = createContext<IContextPlayer>({ setSong });
 
   return (
     <div>
@@ -22,8 +20,6 @@ function Player({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-export default Player;
 
 //
 

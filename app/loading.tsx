@@ -1,6 +1,6 @@
 import { RiLoader2Fill } from "react-icons/ri";
 
-function Loading() {
+export default function Loading() {
   return (
     <div className="w-full flex items-center justify-center h-full">
       <RiLoader2Fill
@@ -10,5 +10,3 @@ function Loading() {
     </div>
   );
 }
-
-export default Loading;

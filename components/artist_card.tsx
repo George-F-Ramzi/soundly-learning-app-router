@@ -4,7 +4,7 @@ import { IArtist } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
 
-function ArtistCard({ data }: { data: IArtist }) {
+export default function ArtistCard({ data }: { data: IArtist }) {
   return (
     <Link
       href={`/artist/${data.id}`}
@@ -24,5 +24,3 @@ function ArtistCard({ data }: { data: IArtist }) {
     </Link>
   );
 }
-
-export default ArtistCard;
