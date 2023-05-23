@@ -1,5 +1,7 @@
 "use server";
 
+import Like from "@/components/like";
+import PlayButton from "@/components/play";
 import { songs } from "@/utils/db";
 import { ISong } from "@/utils/types";
 import Image from "next/image";
@@ -29,6 +31,10 @@ export default async function SongPage({ params }: { params: { id: string } }) {
             {data.likes}:Likes
           </p>
         </div>
+      </div>
+      <div className="mt-14 w-full h-12 grid grid-cols-2 gap-6">
+        <PlayButton data={data} />
+        <Like id={data.id} />
       </div>
     </main>
   );

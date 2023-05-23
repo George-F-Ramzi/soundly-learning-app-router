@@ -14,12 +14,14 @@ export default function AuthNav() {
   const [data, setData] = useState<IArtist>();
 
   useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (!token) return;
     const api = async () => {
       let Res = await fetch("http://localhost:3000/api/me", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "x-auth-token": localStorage.getItem("token")!,
+          "x-auth-token": token!,
         },
       });
       if (!Res.ok) throw Error();
