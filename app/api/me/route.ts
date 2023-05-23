@@ -1,9 +1,15 @@
 import { artists } from "@/utils/db";
 import { NextResponse } from "next/server";
 import { IArtist } from "@/utils/types";
+import { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
-export async function GET() {
-  let me: IArtist = artists.findOne({ id: 1 });
+export async function GET(req: Request) {
+  let token = req.headers.get("x-auth-token");
+  let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
+
+  let me: IArtist = artists.findOne({ id });
+
   //@ts-ignore
   delete me.password;
   //@ts-ignore

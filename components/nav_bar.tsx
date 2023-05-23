@@ -12,7 +12,7 @@ export default function NavBar() {
     setToken(localStorage.getItem("token")!);
   }, []);
 
-  if (token === "") return <UnAuth />;
+  if (!token) return <UnAuth />;
 
   return <AuthNav />;
 }

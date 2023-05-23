@@ -68,7 +68,7 @@ export let artists_data = [
   {
     id: 7,
     username: "ZZZ",
-    email: "zzz#@email.com",
+    email: "zzz@email.com",
     password: "$2b$10$J6dQPtcYcOAaheLYV1zSfOty/C0vcGUwrR4.F51NNIhZSCLlya/5e",
     followers: 783,
     following: 339,
@@ -79,7 +79,7 @@ export let artists_data = [
   {
     id: 8,
     username: "Madona",
-    email: "madona#@email.com",
+    email: "madona@email.com",
     password: "$2b$10$J6dQPtcYcOAaheLYV1zSfOty/C0vcGUwrR4.F51NNIhZSCLlya/5e",
     followers: 883,
     following: 349,
@@ -90,11 +90,22 @@ export let artists_data = [
   {
     id: 9,
     username: "Mariam",
-    email: "mariam#@email.com",
+    email: "mariam@email.com",
     password: "$2b$10$J6dQPtcYcOAaheLYV1zSfOty/C0vcGUwrR4.F51NNIhZSCLlya/5e",
     followers: 383,
     following: 339,
     songs: 1,
+    photo:
+      "https://res.cloudinary.com/dwnvkwrox/image/upload/v1671018225/123456789.png",
+  },
+  {
+    id: 10,
+    username: "Demo Account",
+    email: "demo@email.com",
+    password: "$2b$10$J6dQPtcYcOAaheLYV1zSfOty/C0vcGUwrR4.F51NNIhZSCLlya/5e",
+    followers: 0,
+    following: 0,
+    songs: 0,
     photo:
       "https://res.cloudinary.com/dwnvkwrox/image/upload/v1671018225/123456789.png",
   },

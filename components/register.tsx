@@ -1,6 +1,7 @@
 "use client";
 
-let token = "h";
+let token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTY4NDc3MjMxMX0.g7FABMbT-gmt-x1hRVVGd3sfSeQxdsTTI1_s0_5qfBs";
 
 interface Prop {
   toggle: (value: boolean) => void;
