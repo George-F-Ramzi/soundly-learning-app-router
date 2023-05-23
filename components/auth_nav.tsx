@@ -15,7 +15,7 @@ export default function AuthNav() {
 
   useEffect(() => {
     let token = localStorage.getItem("token");
-    if (!token) return;
+
     const api = async () => {
       let Res = await fetch("http://localhost:3000/api/me", {
         method: "GET",
@@ -24,7 +24,7 @@ export default function AuthNav() {
           "x-auth-token": token!,
         },
       });
-      if (!Res.ok) throw Error();
+      if (!Res.ok) localStorage.removeItem("token");
 
       let data = await Res.json();
       localStorage.setItem("user", JSON.stringify(data));

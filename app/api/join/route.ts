@@ -22,9 +22,10 @@ export async function POST(req: Request) {
   }
 
   let hashed_pass: string = await hashing.hash(data.password, 10);
+  let user_id = Math.random();
 
-  let { id } = artists.insert({
-    id: Math.random(),
+  let user = artists.insert({
+    id: user_id,
     username: data.username,
     email: data.email,
     password: hashed_pass,
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
       "https://res.cloudinary.com/dwnvkwrox/image/upload/v1671018225/123456789.png",
   });
 
-  let token = jwt.sign({ id }, process.env.JWT_PASS!);
+  let token = jwt.sign({ id: user.id }, process.env.JWT_PASS!);
 
   return NextResponse.json("Done", {
     headers: { "x-auth-token": token },

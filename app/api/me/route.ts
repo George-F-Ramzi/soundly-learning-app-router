@@ -6,7 +6,8 @@ import jwt from "jsonwebtoken";
 
 export async function GET(req: Request) {
   let token = req.headers.get("x-auth-token");
-  let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
+  let decoded = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
+  let id = Number(decoded.id);
 
   let me: IArtist = artists.findOne({ id });
 

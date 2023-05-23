@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   let token = req.headers.get("x-auth-token");
   let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
 
-  let liked = likes.find({ artist: id });
+  let liked = likes.find({ artist: Number(id) });
   let songs_id = liked.map((s) => s.song);
   let songs_data: ISong[] = songs.find({ id: { $in: songs_id } });
 
