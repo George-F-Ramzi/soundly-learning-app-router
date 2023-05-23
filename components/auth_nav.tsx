@@ -25,6 +25,7 @@ export default function AuthNav() {
       if (!Res.ok) throw Error();
 
       let data = await Res.json();
+      localStorage.setItem("user", JSON.stringify(data));
       setData(data);
     };
     api();

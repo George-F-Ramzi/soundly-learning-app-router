@@ -18,5 +18,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/me", "/api/liked"],
+  matcher: ["/api/me", "/api/liked", "/api/follow/:path*"],
 };

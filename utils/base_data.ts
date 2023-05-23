@@ -210,6 +210,7 @@ export let followers_data = [
   { artist: 1, fan: 2 },
   { artist: 1, fan: 3 },
   { artist: 1, fan: 4 },
+  { artist: 1, fan: 10 },
 ];
 
 export let notification_data = [
