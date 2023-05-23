@@ -18,5 +18,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/me"],
+  matcher: ["/api/me", "/api/liked"],
 };

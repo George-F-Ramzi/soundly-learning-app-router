@@ -201,8 +201,8 @@ export let comments_data = [
 ];
 
 export let likes_data = [
-  { artist: 1, song: 1 },
-  { artist: 1, song: 2 },
+  { artist: 10, song: 1 },
+  { artist: 10, song: 2 },
   { artist: 1, song: 3 },
 ];
 
