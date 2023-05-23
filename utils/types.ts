@@ -27,3 +27,14 @@ export interface IContextPlayer {
 export interface IContextJoin {
   setShow?: (value: boolean) => void;
 }
+
+export interface InboxCardType {
+  trigger: number;
+  nottifier: number;
+  song: number | null;
+  message: string;
+  artist: {
+    photo: string;
+    username: string;
+  };
+}

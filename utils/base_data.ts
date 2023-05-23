@@ -103,7 +103,7 @@ export let artists_data = [
     username: "Demo Account",
     email: "demo@email.com",
     password: "$2b$10$J6dQPtcYcOAaheLYV1zSfOty/C0vcGUwrR4.F51NNIhZSCLlya/5e",
-    followers: 0,
+    followers: 1,
     following: 0,
     songs: 0,
     photo:
@@ -193,12 +193,18 @@ export let songs_data = [
     artist: 9,
     likes: 923,
   },
+  {
+    id: 10,
+    name: "Hi There!",
+    song: "https://res.cloudinary.com/dwnvkwrox/video/upload/v1672556957/ptf7yloeids5apikmpne.mp3",
+    cover:
+      "https://res.cloudinary.com/dwnvkwrox/image/upload/v1672556957/pa5zqhgcxv5eabyconv6.jpg",
+    artist: 10,
+    likes: 1,
+  },
 ];
 
-export let comments_data = [
-  { details: "nice song", artist: 1, song: 1 },
-  { details: "nice song", artist: 2, song: 1 },
-];
+export let comments_data = [{ details: "nice song", artist: 1, song: 10 }];
 
 export let likes_data = [
   { artist: 10, song: 1 },
@@ -214,5 +220,8 @@ export let followers_data = [
 ];
 
 export let notification_data = [
-  { trigger: 1, nottifier: 2, song: 1, message: "Uploaded A New Song" },
+  { trigger: 1, nottifier: 10, song: 1, message: "Uploaded A New Song" },
+  { trigger: 1, nottifier: 10, song: null, message: "Started Following You" },
+  { trigger: 1, nottifier: 10, song: 10, message: "Likes Your Song" },
+  { trigger: 1, nottifier: 10, song: 10, message: "Commented On Your Song" },
 ];
