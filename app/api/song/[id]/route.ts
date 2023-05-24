@@ -1,28 +1,22 @@
-import { artists, songs } from "@/utils/db";
 import { NextResponse } from "next/server";
-import { IArtist, ISong } from "@/utils/types";
+import prisma from "@/utils/db";
 
 export async function GET(req: Request) {
   let url = req.url;
   let index = url.indexOf("song");
   let id = url.slice(index + 5);
 
-  let song: ISong = songs.findOne({ id: Number(id) });
+  let song_info = await prisma.song.findUnique({
+    where: { id: Number(id) },
+    include: { artist: { select: { username: true } } },
+  });
 
-  if (!song) return new Response("song didnt exist", { status: 400 });
+  if (!song_info) return new Response("song didnt exist", { status: 400 });
 
-  let artist: IArtist = artists.findOne({ id: song.artist });
+  let song_comments = await prisma.comment.findMany({
+    where: { song_id: Number(id) },
+    include: { artist: { select: { username: true, photo_url: true } } },
+  });
 
-  song.artist = {
-    id: artist.id,
-    photo: artist.photo,
-    username: artist.username,
-  };
-
-  //@ts-ignore
-  delete song.meta;
-  //@ts-ignore
-  delete song["$loki"];
-
-  return NextResponse.json(song);
+  return NextResponse.json({ info: song_info, comments: song_comments });
 }

@@ -1,6 +1,5 @@
-import { artists, likes, songs } from "@/utils/db";
+import prisma from "@/utils/db";
 import { NextResponse } from "next/server";
-import { IArtist, ISong } from "@/utils/types";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 
@@ -8,27 +7,21 @@ export async function GET(req: Request) {
   let token = req.headers.get("x-auth-token");
   let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
 
-  let liked = likes.find({ artist: Number(id) });
-  let songs_id = liked.map((s) => s.song);
-  let songs_data: ISong[] = songs.find({ id: { $in: songs_id } });
-
-  let artists_id = songs_data.map((s) => s.artist);
-  let artists_data: IArtist[] = artists.find({ id: { $in: artists_id } });
-
-  songs_data.forEach((s: any) => {
-    for (let index = 0; index < artists_data.length; index++) {
-      if (s.artist === artists_data[index].id)
-        s.artist = {
-          id: artists_data[index].id,
-          photo: artists_data[index].photo,
-          username: artists_data[index].username,
-        };
-      //@ts-ignore
-      delete s.meta;
-      //@ts-ignore
-      delete s["$loki"];
-    }
+  let songs = await prisma.like.findMany({
+    where: { fan_id: Number(id) },
+    include: { song: { include: { artist: { select: { username: true } } } } },
   });
 
-  return NextResponse.json(songs_data);
+  let result = songs.map((s) => {
+    return {
+      id: s.song.id,
+      song_name: s.song.song_name,
+      song_cover_url: s.song.song_cover_url,
+      song_file_url: s.song.song_file_url,
+      artist_id: s.song.artist_id,
+      artist: s.song.artist,
+    };
+  });
+
+  return NextResponse.json(result);
 }

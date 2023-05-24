@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Artist {
+  id    Int     @id @default(autoincrement())
+  username String
+  email String @unique
+  password String
+  followers Int? @default(0)
+  following Int? @default(0)
+  songs_uploaded_number Int? @default(0)
+  photo_url String? @default("https://res.cloudinary.com/dwnvkwrox/image/upload/v1671018225/123456789.png")
+  song Song[]
+  artist Follower[] @relation("artist_id")
+  fan Follower[] @relation("fan_id")
+  trigger Notification[] @relation("trigger_id")
+  nottifer Notification[] @relation("nottifer_id")
+  comment Comment[]
+  like Like[]
+  @@fulltext([username])
+}
+
+model Song {
+  id    Int     @id @default(autoincrement())
+  song_name String
+  song_cover_url String
+  song_file_url String
+  likes Int? @default(0)
+  artist Artist  @relation(fields: [artist_id], references: [id])
+  artist_id Int
+  comment Comment[]
+  like Like[]
+  notification Notification[]
+  @@fulltext([song_name])
+}
+
+model Follower {
+  artist Artist  @relation("artist_id",fields: [artist_id], references: [id])
+  artist_id Int
+  fan Artist  @relation("fan_id",fields: [ fan_id], references: [id])
+  fan_id Int
+  @@id([artist_id,fan_id])
+}
+
+model Comment {
+  id    Int     @id @default(autoincrement())
+  artist Artist  @relation(fields: [artist_id], references: [id])
+  artist_id Int
+  song Song  @relation(fields: [song_id], references: [id])
+  song_id Int
+  details String
+}
+
+model Like {
+  fan Artist  @relation(fields: [fan_id], references: [id])
+  fan_id Int
+  song Song  @relation(fields: [song_id], references: [id])
+  song_id Int
+  @@id([song_id,fan_id])
+}
+
+model Notification {
+  id    Int     @id @default(autoincrement())
+  trigger Artist  @relation("trigger_id",fields: [trigger_id], references: [id])
+  trigger_id Int
+  nottifer Artist  @relation("nottifer_id",fields: [nottifer_id], references: [id])
+  nottifer_id Int
+  song Song?  @relation(fields: [song_id], references: [id])
+  song_id Int?
+  message_detail String
+}

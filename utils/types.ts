@@ -38,3 +38,13 @@ export interface InboxCardType {
     username: string;
   };
 }
+
+export interface IComment {
+  artist: number;
+  song: number;
+  details: string;
+  info: {
+    username: string;
+    photo: string;
+  };
+}

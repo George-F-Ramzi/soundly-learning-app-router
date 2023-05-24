@@ -1,36 +1,31 @@
-import { artists, songs } from "@/utils/db";
 import { NextResponse } from "next/server";
-import { IArtist, ISong } from "@/utils/types";
+import prisma from "@/utils/db";
 
 export async function GET(req: Request) {
   let url = req.url;
   let index = url.indexOf("artist");
   let id = url.slice(index + 7);
 
-  let artist: IArtist = artists.findOne({ id: Number(id) });
-
-  let uploaded: ISong[] = songs.find({ artist: Number(id) });
-
-  uploaded.forEach((s) => {
-    s.artist = {
-      id: artist.id,
-      photo: artist.photo,
-      username: artist.username,
-    };
-    //@ts-ignore
-    delete s.meta;
-    //@ts-ignore
-    delete s["$loki"];
+  let artist_info = await prisma.artist.findUnique({
+    where: { id: Number(id) },
+    select: {
+      id: true,
+      followers: true,
+      photo_url: true,
+      username: true,
+      following: true,
+      songs_uploaded_number: true,
+    },
   });
 
-  //@ts-ignore
-  delete artist.password;
-  //@ts-ignore
-  delete artist.email;
-  //@ts-ignore
-  delete artist.meta;
-  //@ts-ignore
-  delete artist["$loki"];
+  if (artist_info === null) {
+    return new Response("Email Doesn't Exist", { status: 400 });
+  }
 
-  return NextResponse.json({ info: artist, songs: uploaded });
+  let artist_songs = await prisma.song.findMany({
+    where: { artist_id: Number(id) },
+    include: { artist: { select: { username: true } } },
+  });
+
+  return NextResponse.json({ info: artist_info, songs: artist_songs });
 }

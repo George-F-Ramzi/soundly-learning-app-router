@@ -1,8 +1,8 @@
-import { artists } from "@/utils/db";
 import { NextResponse } from "next/server";
 import Joi, { Schema } from "joi";
 import hashing from "bcrypt";
 import jwt from "jsonwebtoken";
+import prisma from "@/utils/db";
 
 export async function POST(req: Request) {
   let data = await req.json();
@@ -14,13 +14,19 @@ export async function POST(req: Request) {
   const { error } = schema.validate(data);
   if (error) return new Response(error.message, { status: 400 });
 
-  let artist = artists.findOne({ email: data.email });
+  let artist = await prisma.artist.findFirst({
+    where: { email: data.email },
+    select: { email: true, password: true, id: true },
+  });
 
   if (artist === null) {
     return new Response("Email Doesn't Exist", { status: 400 });
   }
 
-  let hashed_pass = await hashing.compare(data.password, artist.password);
+  let hashed_pass: boolean = await hashing.compare(
+    data.password,
+    artist.password
+  );
 
   if (!hashed_pass) {
     return new Response("Invalid Password", { status: 400 });

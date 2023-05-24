@@ -28,5 +28,6 @@ export const config = {
     "/api/isliked/:path*",
     "/api/like/:path*",
     "/api/dislike/:path*",
+    "/api/comment/:path*",
   ],
 };

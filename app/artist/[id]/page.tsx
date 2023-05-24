@@ -2,7 +2,6 @@
 
 import Follow from "@/components/follow";
 import SongsSection from "@/components/songs_section";
-import { artists } from "@/utils/db";
 import { IArtist, ISong } from "@/utils/types";
 import Image from "next/image";
 import React from "react";
@@ -15,7 +14,7 @@ export default async function ArtistPage({ params }: Prop) {
   let { id } = params;
 
   let res = await fetch(`http://localhost:3000/api/artist/${id}`, {
-    next: { revalidate: 10 },
+    cache: "no-cache",
   });
 
   let data: { info: IArtist; songs: ISong[] } = await res.json();
@@ -49,12 +48,4 @@ export default async function ArtistPage({ params }: Prop) {
       <SongsSection data={data.songs} title={"Uploaded Songs"} />
     </main>
   );
-}
-
-export async function generateStaticParams() {
-  const data: IArtist[] = artists.chain().find().limit(9).data();
-
-  return data.map((a: IArtist) => ({
-    id: String(a.id),
-  }));
 }

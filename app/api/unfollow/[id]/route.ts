@@ -1,4 +1,4 @@
-import { followers } from "@/utils/db";
+import prisma from "@/utils/db";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export async function DELETE(req: Request) {
@@ -8,18 +8,20 @@ export async function DELETE(req: Request) {
   let index = url.indexOf("unfollow");
   let artist_id = url.slice(index + 9);
 
-  let followed = followers.findOne({
-    artist: Number(artist_id),
-    fan: Number(id),
+  await prisma.follower.delete({
+    where: {
+      artist_id_fan_id: { artist_id: Number(artist_id), fan_id: Number(id) },
+    },
   });
 
-  if (!followed) {
-    return new Response("You Don't Follow This User", { status: 400 });
-  }
+  await prisma.artist.update({
+    where: { id: Number(id) },
+    data: { following: { decrement: 1 } },
+  });
 
-  followers.removeWhere({
-    artist: Number(artist_id),
-    fan: Number(id),
+  await prisma.artist.update({
+    where: { id: Number(artist_id) },
+    data: { followers: { decrement: 1 } },
   });
 
   return new Response("Done", { status: 200 });

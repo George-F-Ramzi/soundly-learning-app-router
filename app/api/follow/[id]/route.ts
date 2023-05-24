@@ -1,4 +1,4 @@
-import { followers, notification } from "@/utils/db";
+import prisma from "@/utils/db";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export async function POST(req: Request) {
@@ -8,26 +8,26 @@ export async function POST(req: Request) {
   let index = url.indexOf("follow");
   let artist_id = url.slice(index + 7);
 
-  let followed = followers.findOne({
-    artist: Number(artist_id),
-    fan: Number(id),
+  await prisma.follower.create({
+    data: { artist_id: Number(artist_id), fan_id: Number(id) },
   });
 
-  if (followed) {
-    return new Response("You Allready Follow This User", { status: 400 });
-  }
-
-  followers.insertOne({
-    artist: Number(artist_id),
-    fan: Number(id),
+  await prisma.artist.update({
+    where: { id: Number(id) },
+    data: { following: { increment: 1 } },
   });
 
-  notification.insertOne({
-    trigger: Number(id),
-    nottifier: Number(artist_id),
-    song: null,
-    message: "Started Following You",
+  await prisma.artist.update({
+    where: { id: Number(artist_id) },
+    data: { followers: { increment: 1 } },
   });
 
+  await prisma.notification.create({
+    data: {
+      message_detail: "Started Following You",
+      nottifer_id: Number(artist_id),
+      trigger_id: Number(id),
+    },
+  });
   return new Response("Done", { status: 200 });
 }

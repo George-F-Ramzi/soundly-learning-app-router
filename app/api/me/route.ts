@@ -1,6 +1,5 @@
-import { artists } from "@/utils/db";
+import prisma from "@/utils/db";
 import { NextResponse } from "next/server";
-import { IArtist } from "@/utils/types";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 
@@ -9,16 +8,10 @@ export async function GET(req: Request) {
   let decoded = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
   let id = Number(decoded.id);
 
-  let me: IArtist = artists.findOne({ id });
+  let result = await prisma.artist.findUnique({
+    where: { id: Number(id) },
+    select: { id: true, photo_url: true, username: true },
+  });
 
-  //@ts-ignore
-  delete me.password;
-  //@ts-ignore
-  delete me.email;
-  //@ts-ignore
-  delete me.meta;
-  //@ts-ignore
-  delete me["$loki"];
-
-  return NextResponse.json(me);
+  return NextResponse.json(result);
 }
