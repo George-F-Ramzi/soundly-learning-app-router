@@ -14,10 +14,11 @@ function Comments({ data, id }: { data: IComment[]; id: number }) {
     let user = JSON.parse(localStorage.getItem("user")!);
     let clone: IComment[] = [...comments];
     clone.unshift({
-      artist: user.id,
+      artist: { photo_url: user.photo_url, username: user.username },
       details: Ivalue,
-      song: id,
-      info: { photo: user.photo, username: user.username },
+      song_id: id,
+      artist_id: Math.random(),
+      id: Math.random(),
     });
     setComments(clone);
     setInput("");
@@ -74,18 +75,18 @@ export default Comments;
 function CommentCard({ data }: { data: IComment }) {
   return (
     <div className="mt-8 flex">
-      <Link className="min-w-fit" href={`/artist/${data.artist}`}>
+      <Link className="min-w-fit" href={`/artist/${data.artist_id}`}>
         <Image
           height={48}
           width={48}
           alt="profile image"
-          src={data.info.photo}
+          src={data.artist.photo_url}
           className="min-w-12 w-12  h-12  rounded-full"
         />
       </Link>
       <div className="h-fit ml-4 p-4 max-w-[512px] rounded-lg bg-gray-800">
         <Link href={`/artist/${data.artist}`} className="font-bold text-white">
-          {data.info.username}
+          {data.artist.username}
         </Link>
         <div className="font-bold mt-4 text-gray-300">{data.details}</div>
       </div>

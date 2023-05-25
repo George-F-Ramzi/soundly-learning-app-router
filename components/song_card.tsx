@@ -14,9 +14,9 @@ export default function SongCard({ data }: { data: ISong }) {
     <div className="w-full items-center  p-[8px] flex  h-[80px] bg-gray-800 text-white rounded-[4px]">
       <div className="w-[64px] h-full relative">
         <Image
-          src={data.cover}
+          src={data.song_cover_url}
           className="min-w-[64px] h-full rounded"
-          alt={`${data.name}`}
+          alt={`${data.song_name}`}
           width={64}
           height={64}
         />
@@ -32,10 +32,10 @@ export default function SongCard({ data }: { data: ISong }) {
           href={`/song/${data.id}`}
           className="font-bold cursor-pointer mb-2"
         >
-          {data.name}
+          {data.song_name}
         </Link>
         <Link
-          href={`/artist/${data.artist.id}`}
+          href={`/artist/${data.artist_id}`}
           className="text-gray-300 cursor-pointer"
         >
           {data.artist.username}

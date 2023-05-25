@@ -10,6 +10,11 @@ interface Prop {
   params: { id: string };
 }
 
+interface Info extends IArtist {
+  following: number;
+  songs_uploaded_number: number;
+}
+
 export default async function ArtistPage({ params }: Prop) {
   let { id } = params;
 
@@ -17,7 +22,7 @@ export default async function ArtistPage({ params }: Prop) {
     cache: "no-cache",
   });
 
-  let data: { info: IArtist; songs: ISong[] } = await res.json();
+  let data: { info: Info; songs: ISong[] } = await res.json();
 
   return (
     <main className="mt-16 pb-36 text-white">
@@ -27,7 +32,7 @@ export default async function ArtistPage({ params }: Prop) {
           width={100}
           alt="profile image"
           className="min-w-[100px]  max-h-[100px] rounded mb-10"
-          src={data.info.photo}
+          src={data.info.photo_url}
         />
         <h1 className="font-bold tablet:text-xl text-5xl mb-7">
           {data.info.username}
@@ -37,10 +42,10 @@ export default async function ArtistPage({ params }: Prop) {
             {data.info.followers}:Followers
           </p>
           <p className="text-base tablet:text-sm mr-4 font-bold text-gray-300">
-            {data.info.following}:Following
+            {data.info.followers}:Following
           </p>
           <p className="text-base tablet:text-sm font-bold text-gray-300">
-            {data.info.songs}:Songs
+            {data.info.songs_uploaded_number}:Songs
           </p>
         </div>
       </div>

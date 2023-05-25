@@ -30,7 +30,7 @@ function PlayerBody({ song }: { song: ISong }) {
         <Link href={`/song/${song.id}`}>
           <Image
             className="min-w-[100px] tablet:h-[100px]  tablet:absolute w-[100px] tablet:-top-10 tablet:border tablet:border-gray-500 h-full rounded"
-            src={song.cover}
+            src={song.song_cover_url}
             width={100}
             height={100}
             alt="song-thumbnail"
@@ -38,10 +38,10 @@ function PlayerBody({ song }: { song: ISong }) {
         </Link>
         <div className="text-white mr-8 tablet:absolute tablet:left-[120px] tablet:top-[4px]  min-w-fit flex-col justify-center flex font-bold ml-4 text-2xl">
           <Link href={`/song/${song.id}`} className="text-xl">
-            {song.name}
+            {song.song_name}
           </Link>
           <Link
-            href={`/artist/${song.artist.id}`}
+            href={`/artist/${song.artist_id}`}
             className="text-[14px] text-gray-300"
           >
             {song.artist.username}
@@ -50,7 +50,7 @@ function PlayerBody({ song }: { song: ISong }) {
         <AudioPlayer
           layout="horizontal"
           showJumpControls={false}
-          src={song.song}
+          src={song.song_file_url}
           autoPlay
           className="w-full  mx-4 tablet:mt-10 tablet:ml-0  "
         />

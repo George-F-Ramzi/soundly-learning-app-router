@@ -1,0 +1,1 @@
+ALTER TABLE `Notification` RENAME COLUMN `cover` TO `message`;

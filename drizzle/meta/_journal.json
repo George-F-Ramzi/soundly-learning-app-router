@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1684990372695,
+      "tag": "0000_fuzzy_wiccan",
+      "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1684993127832,
+      "tag": "0001_amused_sunset_bain",
+      "breakpoints": false
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1684993724774,
+      "tag": "0002_orange_squadron_sinister",
+      "breakpoints": false
+    }
+  ]
+}

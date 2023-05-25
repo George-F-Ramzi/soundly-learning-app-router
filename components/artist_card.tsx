@@ -13,7 +13,7 @@ export default function ArtistCard({ data }: { data: IArtist }) {
       <Image
         width={64}
         height={64}
-        src={data.photo}
+        src={data.photo_url}
         alt={`${data.username}`}
         className="min-w-[64px] h-full rounded"
       />

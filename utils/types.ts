@@ -1,22 +1,19 @@
 export interface IArtist {
   id: number;
-  username: string;
   followers: number;
-  following: number;
-  songs: number;
-  photo: string;
+  photo_url: string;
+  username: string;
 }
 
 export interface ISong {
   id: number;
-  name: string;
-  song: string;
-  cover: string;
+  song_name: string;
+  song_cover_url: string;
+  song_file_url: string;
   likes: number;
+  artist_id: number;
   artist: {
-    id: number;
     username: string;
-    photo: string;
   };
 }
 
@@ -29,22 +26,24 @@ export interface IContextJoin {
 }
 
 export interface InboxCardType {
-  trigger: number;
-  nottifier: number;
-  song: number | null;
-  message: string;
-  artist: {
-    photo: string;
+  id: number;
+  trigger_id: number;
+  nottifer_id: number;
+  song_id: number | null;
+  message_detail: string;
+  trigger: {
+    photo_url: string;
     username: string;
   };
 }
 
 export interface IComment {
-  artist: number;
-  song: number;
+  id: number;
+  artist_id: number;
+  song_id: number;
   details: string;
-  info: {
+  artist: {
     username: string;
-    photo: string;
+    photo_url: string;
   };
 }
