@@ -29,5 +29,6 @@ export const config = {
     "/api/like/:path*",
     "/api/dislike/:path*",
     "/api/comment/:path*",
+    "/api/upload",
   ],
 };
