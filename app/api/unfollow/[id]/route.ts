@@ -1,4 +1,6 @@
-import prisma from "@/utils/db";
+import { db } from "@/db/db";
+import { Artists, Follower } from "@/db/schema";
+import { and, eq, sql } from "drizzle-orm";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export async function DELETE(req: Request) {
@@ -6,23 +8,28 @@ export async function DELETE(req: Request) {
   let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
   let url = req.url;
   let index = url.indexOf("unfollow");
-  let artist_id = url.slice(index + 9);
+  let artist_id = Number(url.slice(index + 9));
 
-  await prisma.follower.delete({
-    where: {
-      artist_id_fan_id: { artist_id: Number(artist_id), fan_id: Number(id) },
-    },
-  });
+  try {
+    await db
+      .delete(Follower)
+      .where(and(eq(Follower.artist, artist_id), eq(Follower.fan, id)));
 
-  await prisma.artist.update({
-    where: { id: Number(id) },
-    data: { following: { decrement: 1 } },
-  });
+    await db
+      .update(Artists)
+      .set({
+        followers: sql`${Artists.followers} = ${Artists.followers} - 1 `,
+      })
+      .where(eq(Artists.id, artist_id));
 
-  await prisma.artist.update({
-    where: { id: Number(artist_id) },
-    data: { followers: { decrement: 1 } },
-  });
-
-  return new Response("Done", { status: 200 });
+    await db
+      .update(Artists)
+      .set({
+        follwoing: sql`${Artists.follwoing} = ${Artists.follwoing} - 1 `,
+      })
+      .where(eq(Artists.id, id));
+    return new Response("Done", { status: 200 });
+  } catch (error) {
+    return new Response("Something Wrong Happen", { status: 400 });
+  }
 }

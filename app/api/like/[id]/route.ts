@@ -1,4 +1,6 @@
-import prisma from "@/utils/db";
+import { db } from "@/db/db";
+import { Like, Notification, Songs } from "@/db/schema";
+import { eq, sql } from "drizzle-orm";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export async function POST(req: Request) {
@@ -6,33 +8,31 @@ export async function POST(req: Request) {
   let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
   let url = req.url;
   let index = url.indexOf("like");
-  let song_id = url.slice(index + 5);
+  let song_id = Number(url.slice(index + 5));
 
-  let song_row = await prisma.song.findUnique({
-    where: { id: Number(song_id) },
-    select: { artist_id: true },
-  });
+  try {
+    let song = await db.select().from(Songs).where(eq(Songs.id, song_id));
 
-  if (song_row === null)
-    return new Response("You Allready Likes This Song", { status: 400 });
+    if (song.length === 0) {
+      return new Response("This Dont Exist", { status: 400 });
+    }
 
-  await prisma.like.create({
-    data: { fan_id: Number(id), song_id: Number(song_id) },
-  });
+    await db.insert(Like).values({ artist: id, song: song_id });
 
-  await prisma.song.update({
-    where: { id: Number(song_id) },
-    data: { likes: { increment: 1 } },
-  });
+    await db
+      .update(Songs)
+      .set({ likes: sql`${Songs.likes} = ${Songs.likes} + 1 ` })
+      .where(eq(Songs.id, song_id));
 
-  await prisma.notification.create({
-    data: {
-      message_detail: "Likes Your Song",
-      nottifer_id: song_row.artist_id,
-      trigger_id: Number(id),
-      song_id: Number(song_id),
-    },
-  });
+    await db.insert(Notification).values({
+      message: "Likes Your Song",
+      nottifier: song[0].artist,
+      trigger: id,
+      song: song_id,
+    });
 
-  return new Response("Done", { status: 200 });
+    return new Response("Done", { status: 200 });
+  } catch (error) {
+    return new Response("Something Wrong Happen", { status: 400 });
+  }
 }
