@@ -1,24 +1,37 @@
-import prisma from "@/utils/db";
+import { db } from "@/db/db";
+import { Artists, Songs } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { IArtist, ISong } from "@/utils/types";
 
 export async function GET() {
-  let artists = await prisma.artist.findMany({
-    orderBy: { followers: "desc" },
-    select: {
-      id: true,
-      followers: true,
-      photo_url: true,
-      username: true,
-    },
-    take: 9,
-  });
+  try {
+    let artists = await db
+      .select({
+        id: Artists.id,
+        name: Artists.name,
+        followers: Artists.followers,
+        following: Artists.follwoing,
+        songs: Artists.songs,
+        cover: Artists.cover,
+      })
+      .from(Artists)
+      .limit(9);
 
-  let discover = await prisma.song.findMany({
-    orderBy: { likes: "desc" },
-    include: { artist: { select: { username: true } } },
-    take: 9,
-  });
-
-  return NextResponse.json({ discover, popular: artists });
+    let discover = await db
+      .select({
+        id: Songs.name,
+        username: Artists.name,
+        cover: Songs.cover,
+        song: Songs.song,
+        likes: Songs.likes,
+        name: Songs.name,
+        artist: Songs.artist,
+      })
+      .from(Songs)
+      .leftJoin(Artists, eq(Artists.id, Songs.artist))
+      .limit(9);
+    return NextResponse.json({ popular: artists, discover });
+  } catch (error) {
+    return new Response("Something Wrong Happen", { status: 400 });
+  }
 }
