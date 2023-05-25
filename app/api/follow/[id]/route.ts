@@ -1,4 +1,6 @@
-import prisma from "@/utils/db";
+import { db } from "@/db/db";
+import { Artists, Follower, Notification } from "@/db/schema";
+import { eq, sql } from "drizzle-orm";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export async function POST(req: Request) {
@@ -6,28 +8,29 @@ export async function POST(req: Request) {
   let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
   let url = req.url;
   let index = url.indexOf("follow");
-  let artist_id = url.slice(index + 7);
+  let artist_id = Number(url.slice(index + 7));
 
-  await prisma.follower.create({
-    data: { artist_id: Number(artist_id), fan_id: Number(id) },
-  });
+  try {
+    await db.insert(Follower).values({ artist: artist_id, fan: id });
 
-  await prisma.artist.update({
-    where: { id: Number(id) },
-    data: { following: { increment: 1 } },
-  });
+    await db
+      .update(Artists)
+      .set({ followers: sql`${Artists.followers} = ${Artists.followers} + 1 ` })
+      .where(eq(Artists.id, artist_id));
 
-  await prisma.artist.update({
-    where: { id: Number(artist_id) },
-    data: { followers: { increment: 1 } },
-  });
+    await db
+      .update(Artists)
+      .set({ follwoing: sql`${Artists.follwoing} = ${Artists.follwoing} + 1 ` })
+      .where(eq(Artists.id, id));
 
-  await prisma.notification.create({
-    data: {
-      message_detail: "Started Following You",
-      nottifer_id: Number(artist_id),
-      trigger_id: Number(id),
-    },
-  });
-  return new Response("Done", { status: 200 });
+    await db.insert(Notification).values({
+      message: "Started Following You",
+      nottifier: artist_id,
+      trigger: id,
+      song: null,
+    });
+    return new Response("Done", { status: 200 });
+  } catch (error) {
+    new Response("Something Wrong Happen", { status: 400 });
+  }
 }

@@ -1,31 +1,46 @@
+import { db } from "@/db/db";
+import { Artists, Songs } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import prisma from "@/utils/db";
 
 export async function GET(req: Request) {
   let url = req.url;
   let index = url.indexOf("artist");
-  let id = url.slice(index + 7);
+  let id = Number(url.slice(index + 7));
 
-  let artist_info = await prisma.artist.findUnique({
-    where: { id: Number(id) },
-    select: {
-      id: true,
-      followers: true,
-      photo_url: true,
-      username: true,
-      following: true,
-      songs_uploaded_number: true,
-    },
-  });
+  try {
+    let artist = await db
+      .select({
+        id: Artists.id,
+        name: Artists.name,
+        followers: Artists.followers,
+        following: Artists.follwoing,
+        songs: Artists.songs,
+        cover: Artists.cover,
+      })
+      .from(Artists)
+      .where(eq(Artists.id, id));
 
-  if (artist_info === null) {
-    return new Response("Email Doesn't Exist", { status: 400 });
+    if (artist.length === 0) {
+      return new Response("Artist Doesn't Exist", { status: 400 });
+    }
+
+    let songs = await db
+      .select({
+        id: Songs.name,
+        username: Artists.name,
+        cover: Songs.cover,
+        song: Songs.song,
+        likes: Songs.likes,
+        name: Songs.name,
+        artist: Songs.artist,
+      })
+      .from(Songs)
+      .where(eq(Songs.artist, id))
+      .leftJoin(Artists, eq(Artists.id, id));
+
+    return NextResponse.json({ info: artist[0], songs: songs });
+  } catch (error) {
+    return new Response("Something Wrong Happen", { status: 400 });
   }
-
-  let artist_songs = await prisma.song.findMany({
-    where: { artist_id: Number(id) },
-    include: { artist: { select: { username: true } } },
-  });
-
-  return NextResponse.json({ info: artist_info, songs: artist_songs });
 }
