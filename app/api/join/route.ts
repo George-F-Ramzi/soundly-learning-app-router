@@ -1,8 +1,10 @@
-import prisma from "@/utils/db";
 import { NextResponse } from "next/server";
 import Joi, { Schema } from "joi";
 import hashing from "bcrypt";
 import jwt from "jsonwebtoken";
+import { db } from "@/db/db";
+import { Artists } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: Request) {
   let data = await req.json();
@@ -16,22 +18,33 @@ export async function POST(req: Request) {
   const { error } = schema.validate(data);
   if (error) return new Response(error.message, { status: 400 });
 
-  let artist = await prisma.artist.findFirst({ where: { email: data.email } });
+  try {
+    let artist = await db
+      .select({
+        email: Artists.email,
+      })
+      .from(Artists)
+      .where(eq(Artists.email, data.email));
 
-  if (artist !== null) {
-    return new Response("Email ALready Joined", { status: 400 });
+    if (artist.length !== 0) {
+      return new Response("Email ALready Joined", { status: 400 });
+    }
+
+    let hashed_pass: string = await hashing.hash(data.password, 10);
+
+    let inserted = await db.insert(Artists).values({
+      email: data.email,
+      name: data.username,
+      password: hashed_pass,
+    });
+
+    let token = jwt.sign({ id: inserted.insertId }, process.env.JWT_PASS!);
+
+    return NextResponse.json("Done", {
+      headers: { "x-auth-token": token },
+      status: 200,
+    });
+  } catch (error) {
+    return new Response("Something Wrong Happen", { status: 400 });
   }
-
-  let hashed_pass: string = await hashing.hash(data.password, 10);
-
-  let { id } = await prisma.artist.create({
-    data: { email: data.email, password: hashed_pass, username: data.username },
-  });
-
-  let token = jwt.sign({ id: id }, process.env.JWT_PASS!);
-
-  return NextResponse.json("Done", {
-    headers: { "x-auth-token": token },
-    status: 200,
-  });
 }

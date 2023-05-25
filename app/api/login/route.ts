@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import Joi, { Schema } from "joi";
 import hashing from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Migrate, db } from "@/db/db";
+import { db } from "@/db/db";
 import { Artists } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: Request) {
   let data = await req.json();
@@ -15,35 +16,36 @@ export async function POST(req: Request) {
   const { error } = schema.validate(data);
   if (error) return new Response(error.message, { status: 400 });
 
-  let artist = await db
-    .select({ id: Artists.id, email: Artists.email })
-    .from(Artists)
-    .where((Artists.email, data.email));
+  try {
+    let artist = await db
+      .select({
+        id: Artists.id,
+        email: Artists.email,
+        password: Artists.password,
+      })
+      .from(Artists)
+      .where(eq(Artists.email, data.email));
 
-  return NextResponse.json(artist);
+    if (artist.length === 0) {
+      return new Response("Email Doesn't Exist", { status: 400 });
+    }
 
-  // let artist = await prisma.artist.findFirst({
-  //   where: { email: data.email },
-  //   select: { email: true, password: true, id: true },
-  // });
+    let hashed_pass: boolean = await hashing.compare(
+      data.password,
+      artist[0].password!
+    );
 
-  // if (artist === null) {
-  //   return new Response("Email Doesn't Exist", { status: 400 });
-  // }
+    if (!hashed_pass) {
+      return new Response("Invalid Password", { status: 400 });
+    }
 
-  // let hashed_pass: boolean = await hashing.compare(
-  //   data.password,
-  //   artist.password
-  // );
+    let token = jwt.sign({ id: artist[0].id! }, process.env.JWT_PASS!);
 
-  // if (!hashed_pass) {
-  //   return new Response("Invalid Password", { status: 400 });
-  // }
-
-  // let token = jwt.sign({ id: artist.id }, process.env.JWT_PASS!);
-
-  // return NextResponse.json("Done", {
-  //   headers: { "x-auth-token": token },
-  //   status: 200,
-  // });
+    return NextResponse.json("Done", {
+      headers: { "x-auth-token": token },
+      status: 200,
+    });
+  } catch (error) {
+    return new Response("SomeThing Wrong Happen", { status: 400 });
+  }
 }
