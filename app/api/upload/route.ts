@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import { db } from "@/db/db";
@@ -28,9 +27,7 @@ export async function POST(req: Request) {
 
     await db
       .update(Artists)
-      .set({
-        songs: sql`${Artists.songs} = ${Artists.songs} + 1 `,
-      })
+      .set({ songs: sql`${Artists.songs} = ${Artists.songs} + 1 ` })
       .where(eq(Artists.id, id));
 
     let followers = await db
@@ -40,7 +37,7 @@ export async function POST(req: Request) {
 
     let notification_data = followers.map((f) => {
       return {
-        message: "Started Following You",
+        message: "Uploaded A New Song",
         nottifier: f.nottifier,
         trigger: id,
         song: Number(insertId),
