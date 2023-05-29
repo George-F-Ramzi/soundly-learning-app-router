@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
+import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   let requestHeaders = new Headers(request.headers);
   let token = requestHeaders.get("x-auth-token");
 

@@ -2,7 +2,6 @@
 
 # local env files
 .env
-drizzle.config.ts
 
 # dependencies
 /node_modules
