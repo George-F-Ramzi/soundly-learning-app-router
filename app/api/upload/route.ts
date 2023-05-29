@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 
     await db
       .update(Artists)
-      .set({ songs: sql`${Artists.songs} = ${Artists.songs} + 1 ` })
+      .set({ songs: sql`${Artists.songs} + 1` })
       .where(eq(Artists.id, id));
 
     let followers = await db
