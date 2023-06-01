@@ -32,6 +32,7 @@ export default function Register({ toggle, setToken, setShow }: Prop) {
 
     let token = res.headers.get("x-auth-token");
     if (token != null) {
+      localStorage.setItem("token", token);
       setToken(token);
       setShow(false);
     } else {
@@ -58,6 +59,7 @@ export default function Register({ toggle, setToken, setShow }: Prop) {
       <button
         onClick={(e) => {
           e.preventDefault();
+          localStorage.setItem("token", token);
           setToken(token);
           setShow(false);
         }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Login from "./login";
 import Register from "./register";
 import JoinContext from "@/utils/join_context";
@@ -11,6 +11,11 @@ export default function Join({ children }: { children: ReactNode }) {
   const [show, setShow] = useState<boolean>(false);
   const [token, setToken] = useState<string>("");
   const [me, setMe] = useState<IArtist>();
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (token) setToken(token);
+  }, []);
 
   return (
     <div>
