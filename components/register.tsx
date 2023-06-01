@@ -9,9 +9,10 @@ let token =
 interface Prop {
   toggle: (value: boolean) => void;
   setToken: (v: string) => void;
+  setShow: (v: boolean) => void;
 }
 
-export default function Register({ toggle, setToken }: Prop) {
+export default function Register({ toggle, setToken, setShow }: Prop) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -32,7 +33,7 @@ export default function Register({ toggle, setToken }: Prop) {
     let token = res.headers.get("x-auth-token");
     if (token != null) {
       setToken(token);
-      return window.location.reload();
+      setShow(false);
     } else {
       let message = (await res.text()).toLowerCase();
       setError(message);
@@ -57,8 +58,8 @@ export default function Register({ toggle, setToken }: Prop) {
       <button
         onClick={(e) => {
           e.preventDefault();
-          localStorage.setItem("token", token);
-          window.location.reload();
+          setToken(token);
+          setShow(false);
         }}
         className="w-full h-12 rounded-[4px] border border-gray-500 text-gray-300 font-bold mb-12"
       >

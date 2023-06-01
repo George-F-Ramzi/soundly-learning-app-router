@@ -12,7 +12,7 @@ export async function GET(req: Request) {
   try {
     let songs = await db
       .select({
-        id: Songs.name,
+        id: Songs.id,
         username: Artists.name,
         cover: Songs.cover,
         song: Songs.song,

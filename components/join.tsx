@@ -17,7 +17,11 @@ export default function Join({ children }: { children: ReactNode }) {
       <JoinContext.Provider value={{ setShow, token, setToken, setMe, me }}>
         {children}
       </JoinContext.Provider>
-      {show ? <ModelBody setToken={setToken} show={setShow} /> : ""}
+      {show ? (
+        <ModelBody setShow={setShow} setToken={setToken} show={setShow} />
+      ) : (
+        ""
+      )}
     </div>
   );
 }
@@ -25,9 +29,11 @@ export default function Join({ children }: { children: ReactNode }) {
 function ModelBody({
   show,
   setToken,
+  setShow,
 }: {
   show: (v: boolean) => void;
   setToken: (v: string) => void;
+  setShow: (v: boolean) => void;
 }) {
   const [toggle, setToggle] = useState(false);
 
@@ -40,9 +46,9 @@ function ModelBody({
           className="absolute cursor-pointer right-4 top-4"
         />
         {toggle ? (
-          <Login setToken={setToken} toggle={setToggle} />
+          <Login setToken={setToken} setShow={setShow} toggle={setToggle} />
         ) : (
-          <Register setToken={setToken} toggle={setToggle} />
+          <Register setShow={setShow} setToken={setToken} toggle={setToggle} />
         )}
       </div>
     </div>
