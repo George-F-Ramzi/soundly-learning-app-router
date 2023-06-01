@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import JoinContext from "@/utils/join_context";
+import { IContextJoin } from "@/utils/types";
+import { useContext, useEffect, useState } from "react";
 
 export default function AuthLike({ id }: { id: number }) {
   const [liked, setLiked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { token }: IContextJoin = useContext(JoinContext);
 
   useEffect(() => {
     setLoading(true);
@@ -11,7 +14,7 @@ export default function AuthLike({ id }: { id: number }) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "x-auth-token": localStorage.getItem("token")!,
+          "x-auth-token": token!,
         },
       });
       if (!Res.ok) throw Error();
@@ -22,7 +25,7 @@ export default function AuthLike({ id }: { id: number }) {
       else setLiked(true);
     };
     api();
-  }, [id]);
+  }, [id, token]);
 
   if (loading)
     return (
@@ -43,7 +46,7 @@ export default function AuthLike({ id }: { id: number }) {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "x-auth-token": localStorage.getItem("token")!,
+              "x-auth-token": token!,
             },
           });
         }}
@@ -61,7 +64,7 @@ export default function AuthLike({ id }: { id: number }) {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("token")!,
+            "x-auth-token": token!,
           },
         });
       }}

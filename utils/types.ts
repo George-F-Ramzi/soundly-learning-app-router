@@ -1,20 +1,20 @@
 export interface IArtist {
   id: number;
+  name: string;
   followers: number;
-  photo_url: string;
-  username: string;
+  following: number;
+  songs: number;
+  cover: string;
 }
 
 export interface ISong {
   id: number;
-  song_name: string;
-  song_cover_url: string;
-  song_file_url: string;
+  username: string;
+  cover: string;
+  song: string;
   likes: number;
-  artist_id: number;
-  artist: {
-    username: string;
-  };
+  name: string;
+  artist: number;
 }
 
 export interface IContextPlayer {
@@ -23,27 +23,27 @@ export interface IContextPlayer {
 
 export interface IContextJoin {
   setShow?: (value: boolean) => void;
+  setToken?: (value: string) => void;
+  setMe?: (value: IArtist) => void;
+  token?: string;
+  me?: IArtist;
 }
 
 export interface InboxCardType {
   id: number;
-  trigger_id: number;
-  nottifer_id: number;
-  song_id: number | null;
-  message_detail: string;
-  trigger: {
-    photo_url: string;
-    username: string;
-  };
+  trigger: number;
+  nottifier: number;
+  message: string;
+  song: number;
+  cover: string;
+  name: string;
 }
 
 export interface IComment {
   id: number;
-  artist_id: number;
-  song_id: number;
+  song: number;
+  artist: number;
   details: string;
-  artist: {
-    username: string;
-    photo_url: string;
-  };
+  name: string;
+  cover: string;
 }

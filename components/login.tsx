@@ -7,10 +7,11 @@ let token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTY4NDc3MjMxMX0.g7FABMbT-gmt-x1hRVVGd3sfSeQxdsTTI1_s0_5qfBs";
 
 interface Prop {
+  setToken: (v: string) => void;
   toggle: (value: boolean) => void;
 }
 
-export default function Login({ toggle }: Prop) {
+export default function Login({ toggle, setToken }: Prop) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -29,7 +30,7 @@ export default function Login({ toggle }: Prop) {
 
     let token = res.headers.get("x-auth-token");
     if (token != null) {
-      localStorage.setItem("token", token);
+      setToken(token);
       return window.location.reload();
     } else {
       let message = (await res.text()).toLowerCase();

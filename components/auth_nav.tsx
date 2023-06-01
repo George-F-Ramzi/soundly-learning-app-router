@@ -4,18 +4,19 @@ import { RiSearch2Line, RiInboxArchiveLine, RiHeartLine } from "react-icons/ri";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IArtist } from "@/utils/types";
 import SideBar from "./side_bar";
+import JoinContext from "@/utils/join_context";
+import { IContextJoin } from "@/utils/types";
 
 export default function AuthNav() {
   let navigate = useRouter();
   const [Ivalue, setIvalue] = useState("");
   const [data, setData] = useState<IArtist>();
+  const { token, setMe }: IContextJoin = useContext(JoinContext);
 
   useEffect(() => {
-    let token = localStorage.getItem("token");
-
     const api = async () => {
       let Res = await fetch("http://localhost:3000/api/me", {
         method: "GET",
@@ -24,14 +25,14 @@ export default function AuthNav() {
           "x-auth-token": token!,
         },
       });
-      if (!Res.ok) localStorage.removeItem("token");
+      if (!Res.ok) throw Error;
 
-      let data = await Res.json();
-      localStorage.setItem("user", JSON.stringify(data));
+      let data: IArtist = await Res.json();
+      setMe && setMe(data);
       setData(data);
     };
     api();
-  }, []);
+  }, [setMe, token]);
 
   if (!data)
     return (
@@ -101,7 +102,7 @@ export default function AuthNav() {
               height={48}
               width={48}
               alt="profile image"
-              src={data.photo}
+              src={data.cover}
               className="h-12 w-12 cursor-pointer rounded-full ml-4 "
             />
           </Link>

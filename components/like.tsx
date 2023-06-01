@@ -2,18 +2,13 @@
 
 import JoinContext from "@/utils/join_context";
 import { IContextJoin } from "@/utils/types";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import AuthLike from "./auth.like";
 
 export default function Like({ id }: { id: number }) {
-  const [token, setToken] = useState<string>();
+  const { token }: IContextJoin = useContext(JoinContext);
 
-  useEffect(() => {
-    let token: string = localStorage.getItem("token")!;
-    setToken(token);
-  }, []);
-
-  if (token) return <AuthLike id={id} />;
+  if (token !== "") return <AuthLike id={id} />;
 
   return <UnAuth />;
 }

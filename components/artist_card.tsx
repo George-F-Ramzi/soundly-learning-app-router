@@ -13,12 +13,12 @@ export default function ArtistCard({ data }: { data: IArtist }) {
       <Image
         width={64}
         height={64}
-        src={data.photo_url}
-        alt={`${data.username}`}
+        src={data.cover}
+        alt={`${data.name}`}
         className="min-w-[64px] h-full rounded"
       />
       <section className="ml-4 grow ">
-        <h5 className="font-bold mb-1 grow">{data.username}</h5>
+        <h5 className="font-bold mb-1 grow">{data.name}</h5>
         <p className="text-gray-300">{data.followers}:Followers</p>
       </section>
     </Link>

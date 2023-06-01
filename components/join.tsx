@@ -5,21 +5,30 @@ import Login from "./login";
 import Register from "./register";
 import JoinContext from "@/utils/join_context";
 import { RiCloseLine } from "react-icons/ri";
+import { IArtist } from "@/utils/types";
 
 export default function Join({ children }: { children: ReactNode }) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState<boolean>(false);
+  const [token, setToken] = useState<string>("");
+  const [me, setMe] = useState<IArtist>();
 
   return (
     <div>
-      <JoinContext.Provider value={{ setShow }}>
+      <JoinContext.Provider value={{ setShow, token, setToken, setMe, me }}>
         {children}
       </JoinContext.Provider>
-      {show ? <ModelBody show={setShow} /> : ""}
+      {show ? <ModelBody setToken={setToken} show={setShow} /> : ""}
     </div>
   );
 }
 
-function ModelBody({ show }: { show: (v: boolean) => void }) {
+function ModelBody({
+  show,
+  setToken,
+}: {
+  show: (v: boolean) => void;
+  setToken: (v: string) => void;
+}) {
   const [toggle, setToggle] = useState(false);
 
   return (
@@ -31,9 +40,9 @@ function ModelBody({ show }: { show: (v: boolean) => void }) {
           className="absolute cursor-pointer right-4 top-4"
         />
         {toggle ? (
-          <Login toggle={setToggle} />
+          <Login setToken={setToken} toggle={setToggle} />
         ) : (
-          <Register toggle={setToggle} />
+          <Register setToken={setToken} toggle={setToggle} />
         )}
       </div>
     </div>

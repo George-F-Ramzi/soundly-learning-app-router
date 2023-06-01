@@ -19,7 +19,7 @@ export async function GET() {
 
     let discover = await db
       .select({
-        id: Songs.name,
+        id: Songs.id,
         username: Artists.name,
         cover: Songs.cover,
         song: Songs.song,
