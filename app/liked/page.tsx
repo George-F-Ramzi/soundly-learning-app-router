@@ -1,13 +1,15 @@
 "use client";
 
 import SongsSection from "@/components/songs_section";
-import { ISong } from "@/utils/types";
-import { useEffect, useState } from "react";
+import { IContextJoin, ISong } from "@/utils/types";
+import { useContext, useEffect, useState } from "react";
 import Loading from "../loading";
+import JoinContext from "@/utils/join_context";
 
 export default function Liked() {
   const [data, setData] = useState<ISong[]>();
   const [loading, setLoading] = useState(true);
+  const { token }: IContextJoin = useContext(JoinContext);
 
   useEffect(() => {
     const api = async () => {
@@ -15,7 +17,7 @@ export default function Liked() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "x-auth-token": localStorage.getItem("token")!,
+          "x-auth-token": token!,
         },
       });
       if (!Res.ok) throw Error();
@@ -25,7 +27,7 @@ export default function Liked() {
       setLoading(false);
     };
     api();
-  }, []);
+  }, [token]);
 
   if (loading) return <Loading />;
 

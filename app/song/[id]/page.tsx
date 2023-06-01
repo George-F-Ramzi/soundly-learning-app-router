@@ -23,10 +23,10 @@ export default async function SongPage({ params }: { params: { id: string } }) {
           width={100}
           alt="song cover"
           className="min-w-[100px]  max-h-[100px] rounded mb-10"
-          src={data.info.song_cover_url}
+          src={data.info.cover}
         />
         <h1 className="font-bold tablet:text-xl text-5xl mb-7">
-          {data.info.song_name}
+          {data.info.name}
         </h1>
         <div className="flex">
           <p className="text-base tablet:text-sm  font-bold text-gray-300">
