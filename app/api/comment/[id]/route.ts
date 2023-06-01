@@ -25,12 +25,14 @@ export async function POST(req: Request) {
       .insert(Comments)
       .values({ details: data.details, artist: id, song: song_id });
 
-    await db.insert(Notification).values({
-      message: "Commented On Your Song",
-      nottifier: song[0].artist,
-      trigger: id,
-      song: song_id,
-    });
+    if (song[0].artist !== id) {
+      await db.insert(Notification).values({
+        message: "Commented On Your Song",
+        nottifier: song[0].artist,
+        trigger: id,
+        song: song_id,
+      });
+    }
 
     return new Response("Done", { status: 200 });
   } catch (error) {

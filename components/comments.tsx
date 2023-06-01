@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from "react";
 function Comments({ data, id }: { data: IComment[]; id: number }) {
   const [comments, setComments] = useState<IComment[]>([]);
   const [Ivalue, setInput] = useState("");
-  const { token, me }: IContextJoin = useContext(JoinContext);
+  const { token, me, setShow }: IContextJoin = useContext(JoinContext);
 
   const HandlePost = async () => {
     let clone: IComment[] = [...comments];
@@ -41,23 +41,35 @@ function Comments({ data, id }: { data: IComment[]; id: number }) {
 
   return (
     <div>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          await HandlePost();
-        }}
-        className="mt-20 w-full"
-      >
+      {token === "" ? (
         <input
-          className="w-full h-16 border border-gray-500 rounded-full font-bold bg-gray-800 p-4 text-white"
+          className="w-full cursor-pointer mt-20 h-16 border border-gray-500 rounded-full font-bold bg-gray-800 p-4 text-white"
           placeholder="what's on your mind?"
           required
+          onClick={() => setShow && setShow(true)}
+          value={""}
           minLength={1}
           name="details"
-          value={Ivalue}
-          onChange={(e) => setInput(e.currentTarget.value)}
         />
-      </form>
+      ) : (
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await HandlePost();
+          }}
+          className="mt-20 w-full"
+        >
+          <input
+            className="w-full  h-16 border border-gray-500 rounded-full font-bold bg-gray-800 p-4 text-white"
+            placeholder="what's on your mind?"
+            required
+            minLength={1}
+            name="details"
+            value={Ivalue}
+            onChange={(e) => setInput(e.currentTarget.value)}
+          />
+        </form>
+      )}
       <h5 className="my-8 font-bold text-xl">Comments</h5>
       {Array.isArray(comments) && comments.length ? (
         comments.map((c, i) => {
