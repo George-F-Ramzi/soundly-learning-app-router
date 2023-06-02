@@ -18,14 +18,14 @@ export async function DELETE(req: Request) {
     await db
       .update(Artists)
       .set({
-        followers: sql`${Artists.followers} = ${Artists.followers} - 1 `,
+        followers: sql` ${Artists.followers} - 1 `,
       })
       .where(eq(Artists.id, artist_id));
 
     await db
       .update(Artists)
       .set({
-        follwoing: sql`${Artists.follwoing} = ${Artists.follwoing} - 1 `,
+        follwoing: sql`${Artists.follwoing} - 1 `,
       })
       .where(eq(Artists.id, id));
     return new Response("Done", { status: 200 });

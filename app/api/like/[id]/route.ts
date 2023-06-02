@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     await db
       .update(Songs)
-      .set({ likes: sql`${Songs.likes} = ${Songs.likes} + 1 ` })
+      .set({ likes: sql` ${Songs.likes} + 1 ` })
       .where(eq(Songs.id, song_id));
 
     await db.insert(Notification).values({

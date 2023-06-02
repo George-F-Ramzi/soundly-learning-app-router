@@ -15,12 +15,12 @@ export async function POST(req: Request) {
 
     await db
       .update(Artists)
-      .set({ followers: sql`${Artists.followers} = ${Artists.followers} + 1 ` })
+      .set({ followers: sql`${Artists.followers} + 1 ` })
       .where(eq(Artists.id, artist_id));
 
     await db
       .update(Artists)
-      .set({ follwoing: sql`${Artists.follwoing} = ${Artists.follwoing} + 1 ` })
+      .set({ follwoing: sql`${Artists.follwoing} + 1 ` })
       .where(eq(Artists.id, id));
 
     await db.insert(Notification).values({
