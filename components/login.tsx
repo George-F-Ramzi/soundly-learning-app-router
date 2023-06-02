@@ -4,7 +4,7 @@ import { useState } from "react";
 import FormErrorText from "./form_error";
 
 let token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsImlhdCI6MTY4NTYzOTAwM30.vfrrD-AkTdmnGVO-Tn1b1eRZOBF8Z_VB0c_RxaI4lXc";
+  "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTB9.Dn3_y6H5wfQVqwVPjHO229J3kDOmovC2xk19WYnCX5Y";
 
 interface Prop {
   setToken: (v: string) => void;
