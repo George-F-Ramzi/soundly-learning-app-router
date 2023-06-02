@@ -21,7 +21,7 @@
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "joi": "^17.9.2",
-    "jsonwebtoken": "^9.0.0",
+    "jose": "^4.14.4",
     "next": "^13.4.4",
     "postcss": "8.4.23",
     "react": "18.2.0",
@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
-    "@types/jsonwebtoken": "^9.0.2",
     "drizzle-kit": "^0.18.0"
   }
 }

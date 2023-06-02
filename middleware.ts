@@ -1,19 +1,16 @@
 import { NextResponse } from "next/server";
-import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import type { NextRequest } from "next/server";
+import { jwtVerify } from "jose";
 
 export async function middleware(request: NextRequest) {
   let requestHeaders = new Headers(request.headers);
   let token = requestHeaders.get("x-auth-token");
 
   try {
-    jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
+    await jwtVerify(token!, new TextEncoder().encode(process.env.JWT_PASS));
     return NextResponse.next();
   } catch (error) {
-    if (error instanceof JsonWebTokenError) {
-      let { message }: JsonWebTokenError = error;
-      return new Response(message, { status: 400 });
-    }
+    return new Response("Invalid Token", { status: 400 });
   }
 }
 

@@ -1,14 +1,16 @@
-import { JwtPayload } from "jsonwebtoken";
-import jwt from "jsonwebtoken";
 import { db } from "@/db/db";
 import { Artists, Songs, Notification, Follower } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import cloudinary from "@/utils/cloudinary";
+import { jwtVerify } from "jose";
 
 export async function POST(req: Request) {
   let token = req.headers.get("x-auth-token");
-  let decoded = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
-  let id = Number(decoded.id);
+  let { payload } = await jwtVerify(
+    token!,
+    new TextEncoder().encode(process.env.JWT_PASS)
+  );
+  let id = Number(payload.id);
 
   let data = await req.formData();
   let name = data.get("name") as string;

@@ -1,14 +1,18 @@
 import { db } from "@/db/db";
 import { Artists, Follower } from "@/db/schema";
 import { and, eq, sql } from "drizzle-orm";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
 export async function DELETE(req: Request) {
-  let token = req.headers.get("x-auth-token");
-  let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
   let url = req.url;
   let index = url.indexOf("unfollow");
   let artist_id = Number(url.slice(index + 9));
+  let token = req.headers.get("x-auth-token");
+  let { payload } = await jwtVerify(
+    token!,
+    new TextEncoder().encode(process.env.JWT_PASS)
+  );
+  let id = Number(payload.id);
 
   try {
     await db

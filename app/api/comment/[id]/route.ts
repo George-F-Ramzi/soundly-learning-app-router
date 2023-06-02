@@ -1,14 +1,18 @@
 import { db } from "@/db/db";
 import { Comments, Notification, Songs } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
 export async function POST(req: Request) {
-  let token = req.headers.get("x-auth-token");
-  let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
   let url = req.url;
   let index = url.indexOf("comment");
   let song_id = Number(url.slice(index + 8));
+  let token = req.headers.get("x-auth-token");
+  let { payload } = await jwtVerify(
+    token!,
+    new TextEncoder().encode(process.env.JWT_PASS)
+  );
+  let id = Number(payload.id);
 
   try {
     let data = await req.json();

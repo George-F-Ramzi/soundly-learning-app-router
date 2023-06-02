@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { db } from "@/db/db";
 import { Like } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
+import { jwtVerify } from "jose";
 
 export async function GET(req: Request) {
-  let token = req.headers.get("x-auth-token");
-  let { id } = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
   let url = req.url;
   let index = url.indexOf("isliked");
   let song_id = Number(url.slice(index + 8));
+  let token = req.headers.get("x-auth-token");
+  let { payload } = await jwtVerify(
+    token!,
+    new TextEncoder().encode(process.env.JWT_PASS)
+  );
+  let id = Number(payload.id);
 
   try {
     let liked = await db

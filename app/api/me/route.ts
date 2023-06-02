@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
-import { JwtPayload } from "jsonwebtoken";
-import jwt from "jsonwebtoken";
 import { db } from "@/db/db";
 import { Artists } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { jwtVerify } from "jose";
 
 export async function GET(req: Request) {
   let token = req.headers.get("x-auth-token");
-  let decoded = jwt.verify(token!, process.env.JWT_PASS!) as JwtPayload;
-  let id = Number(decoded.id);
+  let { payload } = await jwtVerify(
+    token!,
+    new TextEncoder().encode(process.env.JWT_PASS)
+  );
+  let id = Number(payload.id);
 
   try {
     let result = await db

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import Joi, { Schema } from "joi";
 import hashing from "bcrypt";
-import jwt from "jsonwebtoken";
 import { db } from "@/db/db";
 import { Artists } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import * as jose from "jose";
 
 export async function POST(req: Request) {
   let data = await req.json();
@@ -38,7 +38,9 @@ export async function POST(req: Request) {
       password: hashed_pass,
     });
 
-    let token = jwt.sign({ id: inserted.insertId }, process.env.JWT_PASS!);
+    let token = await new jose.SignJWT({ id: inserted.insertId })
+      .setProtectedHeader({ alg: "HS256" })
+      .sign(new TextEncoder().encode(process.env.JWT_PASS));
 
     return NextResponse.json("Done", {
       headers: { "x-auth-token": token },

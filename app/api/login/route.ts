@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import Joi, { Schema } from "joi";
 import hashing from "bcrypt";
-import jwt from "jsonwebtoken";
 import { db } from "@/db/db";
 import { Artists } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import * as jose from "jose";
 
 export async function POST(req: Request) {
   let data = await req.json();
@@ -39,13 +39,16 @@ export async function POST(req: Request) {
       return new Response("Invalid Password", { status: 400 });
     }
 
-    let token = jwt.sign({ id: artist[0].id! }, process.env.JWT_PASS!);
+    let token = await new jose.SignJWT({ id: artist[0].id })
+      .setProtectedHeader({ alg: "HS256" })
+      .sign(new TextEncoder().encode(process.env.JWT_PASS));
 
     return NextResponse.json("Done", {
       headers: { "x-auth-token": token },
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     return new Response("SomeThing Wrong Happen", { status: 400 });
   }
 }
