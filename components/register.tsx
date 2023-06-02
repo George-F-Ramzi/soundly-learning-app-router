@@ -22,7 +22,7 @@ export default function Register({ toggle, setToken, setShow }: Prop) {
     let password: FormDataEntryValue = form.get("password")!;
 
     let data = { username, email, password };
-    let res = await fetch(`http://localhost:3000/api/join`, {
+    let res = await fetch(`https://soundly-peach.vercel.app/api/join`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

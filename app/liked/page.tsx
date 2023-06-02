@@ -13,7 +13,7 @@ export default function Liked() {
 
   useEffect(() => {
     const api = async () => {
-      let Res = await fetch("http://localhost:3000/api/liked", {
+      let Res = await fetch("https://soundly-peach.vercel.app/api/liked", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -9,7 +9,7 @@ import Image from "next/image";
 export default async function SongPage({ params }: { params: { id: string } }) {
   let { id } = params;
 
-  let res = await fetch(`http://localhost:3000/api/song/${id}`, {
+  let res = await fetch(`https://soundly-peach.vercel.app/api/song/${id}`, {
     cache: "no-cache",
   });
 

@@ -13,7 +13,7 @@ interface Prop {
 export default async function ArtistPage({ params }: Prop) {
   let { id } = params;
 
-  let res = await fetch(`http://localhost:3000/api/artist/${id}`, {
+  let res = await fetch(`https://soundly-peach.vercel.app/api/artist/${id}`, {
     cache: "no-cache",
   });
 
