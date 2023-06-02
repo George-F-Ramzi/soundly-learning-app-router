@@ -37,7 +37,7 @@ export default async function ArtistPage({ params }: Prop) {
             {data.info.followers}:Followers
           </p>
           <p className="text-base tablet:text-sm mr-4 font-bold text-gray-300">
-            {data.info.followers}:Following
+            {data.info.following}:Following
           </p>
           <p className="text-base tablet:text-sm font-bold text-gray-300">
             {data.info.songs}:Songs
