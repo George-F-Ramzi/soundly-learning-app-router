@@ -4,7 +4,7 @@ const GlobalError = ({ error, reset }: { error: Error; reset: () => void }) => {
   return (
     <html>
       <body>
-        <div className="w-full p-8 tablet:p-2  h-full flex-col flex items-center justify-center text-white">
+        <div className="w-full  bg-gray-800 p-8 tablet:p-2  h-full flex-col flex items-center justify-center text-white">
           <h1 className="text-[156px] tablet:text-[48px] phone:text-[36px] leading-[150%] font-bold">
             2<span className="text-emerald-400">0</span>2
           </h1>

@@ -28,12 +28,14 @@ export async function POST(req: Request) {
       .set({ likes: sql` ${Songs.likes} + 1 ` })
       .where(eq(Songs.id, song_id));
 
-    await db.insert(Notification).values({
-      message: "Likes Your Song",
-      nottifier: song[0].artist,
-      trigger: id,
-      song: song_id,
-    });
+    if (id === song[0].artist) {
+      await db.insert(Notification).values({
+        message: "Likes Your Song",
+        nottifier: song[0].artist,
+        trigger: id,
+        song: song_id,
+      });
+    }
 
     return new Response("Done", { status: 200 });
   } catch (error) {
