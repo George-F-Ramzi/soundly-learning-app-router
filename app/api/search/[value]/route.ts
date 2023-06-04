@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         cover: Artists.cover,
       })
       .from(Artists)
-      .where(like(Artists.name, `${value}%`));
+      .where(ilike(Artists.name, `${value}%`));
 
     return NextResponse.json({ artists, songs });
   } catch (error) {
