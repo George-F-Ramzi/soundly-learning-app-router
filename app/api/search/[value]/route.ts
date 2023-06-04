@@ -1,6 +1,6 @@
 import { db } from "@/db/db";
 import { Artists, Songs } from "@/db/schema";
-import { eq, like } from "drizzle-orm";
+import { eq, ilike } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         artist: Songs.artist,
       })
       .from(Songs)
-      .where(like(Songs.name, `%${value}%`))
+      .where(ilike(Songs.name, `%${value}%`))
       .leftJoin(Artists, eq(Artists.id, Songs.artist));
 
     let artists = await db
