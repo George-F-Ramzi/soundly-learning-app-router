@@ -1,9 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function GlobalError() {
-  let navigate = useRouter();
   return (
     <html>
       <body>
@@ -17,12 +16,12 @@ export default function GlobalError() {
             JUST HAPPEN
           </h1>
 
-          <button
-            onClick={() => navigate.push("/")}
+          <Link
+            href={"/"}
             className=" mr-6 text-black tablet:px-4 tablet:text-sm text-lg tablet:py-2 font-bold  px-[48px] py-[12px] bg-gradient1 rounded-full"
           >
             GO HOME
-          </button>
+          </Link>
         </div>
       </body>
     </html>
