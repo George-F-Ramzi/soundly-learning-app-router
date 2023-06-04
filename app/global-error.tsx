@@ -1,10 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 const GlobalError = ({ error, reset }: { error: Error; reset: () => void }) => {
+  let navigate = useRouter();
   return (
-    <html className="h-screen">
+    <html>
       <body>
-        <div className="w-full  bg-gray-800 p-8 tablet:p-2  h-full flex-col flex items-center justify-center text-white">
+        <div className="w-full h-screen  bg-gray-800 p-8 tablet:p-2   flex-col flex items-center justify-center text-white">
           <h1 className="text-[156px] tablet:text-[48px] phone:text-[36px] leading-[150%] font-bold">
             2<span className="text-emerald-400">0</span>2
           </h1>
@@ -15,10 +18,10 @@ const GlobalError = ({ error, reset }: { error: Error; reset: () => void }) => {
           </h1>
 
           <button
-            onClick={() => reset()}
+            onClick={() => navigate.push("/")}
             className=" mr-6 text-black tablet:px-4 tablet:text-sm text-lg tablet:py-2 font-bold  px-[48px] py-[12px] bg-gradient1 rounded-full"
           >
-            REFRESH
+            GO HOME
           </button>
         </div>
       </body>
