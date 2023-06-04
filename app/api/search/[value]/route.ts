@@ -1,6 +1,6 @@
 import { db } from "@/db/db";
 import { Artists, Songs } from "@/db/schema";
-import { eq, ilike } from "drizzle-orm";
+import { eq, like } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         artist: Songs.artist,
       })
       .from(Songs)
-      .where(ilike(Songs.name, `%${value}%`))
+      .where(like(Songs.name, `%${value}%`))
       .leftJoin(Artists, eq(Artists.id, Songs.artist));
 
     let artists = await db
@@ -33,10 +33,10 @@ export async function POST(req: Request) {
         cover: Artists.cover,
       })
       .from(Artists)
-      .where(ilike(Artists.name, `${value}%`));
+      .where(like(Artists.name, `%${value}%`));
 
     return NextResponse.json({ artists, songs });
   } catch (error) {
-    return new Response("Something Wrong Happen", { status: 400 });
+    if (error) return new Response(String(error), { status: 400 });
   }
 }
