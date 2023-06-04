@@ -3,8 +3,30 @@
 import Comments from "@/components/comments";
 import Like from "@/components/like";
 import PlayButton from "@/components/play";
+import { db } from "@/db/db";
+import { Songs } from "@/db/schema";
 import { IComment, ISong } from "@/utils/types";
+import { eq } from "drizzle-orm";
+import { Metadata } from "next";
 import Image from "next/image";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  //
+  let { id } = params;
+
+  const song = await db
+    .select({ name: Songs.name })
+    .from(Songs)
+    .where(eq(Songs.id, Number(id)));
+
+  return {
+    title: song[0].name,
+  };
+}
 
 export default async function SongPage({ params }: { params: { id: string } }) {
   let { id } = params;

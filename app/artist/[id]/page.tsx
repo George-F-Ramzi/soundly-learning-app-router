@@ -2,12 +2,29 @@
 
 import Follow from "@/components/follow";
 import SongsSection from "@/components/songs_section";
+import { db } from "@/db/db";
+import { Artists } from "@/db/schema";
 import { IArtist, ISong } from "@/utils/types";
+import { eq } from "drizzle-orm";
+import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 
 interface Prop {
   params: { id: string };
+}
+
+export async function generateMetadata({ params }: Prop): Promise<Metadata> {
+  let { id } = params;
+
+  const artist = await db
+    .select({ name: Artists.name })
+    .from(Artists)
+    .where(eq(Artists.id, Number(id)));
+
+  return {
+    title: artist[0].name,
+  };
 }
 
 export default async function ArtistPage({ params }: Prop) {
