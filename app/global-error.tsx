@@ -18,7 +18,7 @@ export default function GlobalError() {
 
           <Link
             href={"/"}
-            className=" mr-6 text-black tablet:px-4 tablet:text-sm text-lg tablet:py-2 font-bold  px-[48px] py-[12px] bg-gradient1 rounded-full"
+            className=" mt-6 text-black tablet:px-4 tablet:text-sm text-lg tablet:py-2 font-bold  px-[48px] py-[12px] bg-gradient1 rounded-full"
           >
             GO HOME
           </Link>

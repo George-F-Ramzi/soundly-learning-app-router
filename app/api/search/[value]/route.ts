@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         artist: Songs.artist,
       })
       .from(Songs)
-      .where(like(Songs.name, `${value}%`))
+      .where(like(Songs.name, `%${value}%`))
       .leftJoin(Artists, eq(Artists.id, Songs.artist));
 
     let artists = await db
