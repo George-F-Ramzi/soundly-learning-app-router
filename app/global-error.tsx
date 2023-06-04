@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-const GlobalError = ({ error, reset }: { error: Error; reset: () => void }) => {
+export default function GlobalError() {
   let navigate = useRouter();
   return (
     <html>
@@ -27,6 +27,4 @@ const GlobalError = ({ error, reset }: { error: Error; reset: () => void }) => {
       </body>
     </html>
   );
-};
-
-export default GlobalError;
+}
