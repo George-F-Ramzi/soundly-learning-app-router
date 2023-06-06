@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Player from "@/components/player";
 import Join from "@/components/join";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
           <NavBar />
           <Player>{children}</Player>
         </Join>
+        <Analytics />
       </body>
     </html>
   );
