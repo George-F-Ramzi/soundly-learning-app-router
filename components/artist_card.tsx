@@ -15,7 +15,7 @@ export default function ArtistCard({ data }: { data: IArtist }) {
         height={64}
         src={data.cover}
         alt={`${data.name}`}
-        className="min-w-[64px] h-full rounded"
+        className="min-w-[64px] aspect-square h-full rounded"
       />
       <section className="ml-4 grow ">
         <h5 className="font-bold mb-1 grow">{data.name}</h5>
