@@ -37,6 +37,7 @@ export default async function Home() {
         <Image
           width={273}
           height={368}
+          priority
           alt="girl standing with headphone"
           className="absolute right-8 bottom-0 tablet:hidden"
           src="https://res.cloudinary.com/dwnvkwrox/image/upload/v1680784794/Landing_Image_q59zvq.png"
