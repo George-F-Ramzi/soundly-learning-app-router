@@ -18,7 +18,7 @@ export default function ArtistCard({ data }: { data: IArtist }) {
         className="min-w-[64px] h-[64px] aspect-square rounded"
       />
       <section className="ml-4 grow ">
-        <h5 className="font-bold mb-1 grow">{data.name}</h5>
+        <h3 className="font-bold mb-1 grow">{data.name}</h3>
         <p className="text-gray-300">{data.followers}:Followers</p>
       </section>
     </Link>
