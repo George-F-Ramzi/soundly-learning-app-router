@@ -11,7 +11,7 @@ interface Prop {
 export default function SongsSection({ title, data }: Prop) {
   return (
     <section className="mt-10">
-      <h5 className="text-white font-bold text-2xl mb-8">{title}</h5>
+      <h2 className="text-white font-bold text-2xl mb-8">{title}</h2>
       <div className="grid gap-8 grid-cols-cards ">
         {Array.isArray(data) && data.length ? (
           data.map((song, index) => {
