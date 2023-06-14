@@ -15,7 +15,7 @@ export default function SongCard({ data }: { data: ISong }) {
       <div className="w-[64px] h-full relative">
         <Image
           src={data.cover}
-          className="min-w-[64px] h-[64px] aspect-square  rounded"
+          className="min-w-[64px] object-cover h-[64px] aspect-square  rounded"
           alt={`${data.name}`}
           width={64}
           height={64}
