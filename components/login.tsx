@@ -21,7 +21,7 @@ export default function Login({ toggle, setToken, setShow }: Prop) {
     let password: FormDataEntryValue = form.get("password")!;
 
     let data = { email, password };
-    let res = await fetch(`https://soundly-peach.vercel.app/api/login`, {
+    let res = await fetch(`http://localhost:3000/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

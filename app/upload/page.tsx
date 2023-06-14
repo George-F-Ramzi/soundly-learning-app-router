@@ -17,7 +17,7 @@ export default function Upload() {
     form.set("song", song);
     form.set("cover", cover);
 
-    let res = await fetch(`https://soundly-peach.vercel.app/api/upload`, {
+    let res = await fetch(`http://localhost:3000/api/upload`, {
       method: "POST",
       headers: {
         "x-auth-token": token!,

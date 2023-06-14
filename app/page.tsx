@@ -12,7 +12,7 @@ interface IData {
 }
 
 export default async function Home() {
-  let response = await fetch("https://soundly-peach.vercel.app/api/home", {
+  let response = await fetch("http://localhost:3000/api/home", {
     next: { revalidate: 10 },
   });
 

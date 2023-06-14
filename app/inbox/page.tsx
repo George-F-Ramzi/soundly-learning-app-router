@@ -16,7 +16,7 @@ export default function Inbox() {
 
   useEffect(() => {
     const api = async () => {
-      let Res = await fetch("https://soundly-peach.vercel.app/api/inbox", {
+      let Res = await fetch("http://localhost:3000/api/inbox", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

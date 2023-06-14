@@ -3,8 +3,8 @@
 import Follow from "@/components/follow";
 import SongsSection from "@/components/songs_section";
 import { db } from "@/db/db";
-import { Artists } from "@/db/schema";
-import { IArtist, ISong } from "@/utils/types";
+import { Artists, Songs } from "@/db/schema";
+import { ISong } from "@/utils/types";
 import { eq } from "drizzle-orm";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -30,11 +30,31 @@ export async function generateMetadata({ params }: Prop): Promise<Metadata> {
 export default async function ArtistPage({ params }: Prop) {
   let { id } = params;
 
-  let res = await fetch(`https://soundly-peach.vercel.app/api/artist/${id}`, {
-    cache: "no-cache",
-  });
+  let artist = await db
+    .select({
+      id: Artists.id,
+      name: Artists.name,
+      followers: Artists.followers,
+      following: Artists.follwoing,
+      songs: Artists.songs,
+      cover: Artists.cover,
+    })
+    .from(Artists)
+    .where(eq(Artists.id, Number(id)));
 
-  let data: { info: IArtist; songs: ISong[] } = await res.json();
+  let songs = await db
+    .select({
+      id: Songs.id,
+      username: Artists.name,
+      cover: Songs.cover,
+      song: Songs.song,
+      likes: Songs.likes,
+      name: Songs.name,
+      artist: Songs.artist,
+    })
+    .from(Songs)
+    .where(eq(Songs.artist, Number(id)))
+    .leftJoin(Artists, eq(Artists.id, Number(id)));
 
   return (
     <main className="mt-16 pb-36 text-white">
@@ -44,25 +64,25 @@ export default async function ArtistPage({ params }: Prop) {
           width={100}
           alt="profile image"
           className="min-w-[100px]  max-h-[100px] rounded mb-10"
-          src={data.info.cover}
+          src={artist[0].cover!}
         />
         <h1 className="font-bold tablet:text-xl text-5xl mb-7">
-          {data.info.name}
+          {artist[0].name}
         </h1>
         <div className="flex">
           <p className="text-base tablet:text-sm mr-4 font-bold text-gray-300">
-            {data.info.followers}:Followers
+            {artist[0].followers}:Followers
           </p>
           <p className="text-base tablet:text-sm mr-4 font-bold text-gray-300">
-            {data.info.following}:Following
+            {artist[0].following}:Following
           </p>
           <p className="text-base tablet:text-sm font-bold text-gray-300">
-            {data.info.songs}:Songs
+            {artist[0].songs}:Songs
           </p>
         </div>
       </div>
       <Follow id={Number(id)} />
-      <SongsSection data={data.songs} title={"Uploaded Songs"} />
+      <SongsSection data={songs as ISong[]} title={"Uploaded Songs"} />
     </main>
   );
 }

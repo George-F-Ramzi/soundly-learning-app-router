@@ -11,13 +11,10 @@ interface Prop {
 export default async function SearchPage({ params }: Prop) {
   let { value } = params;
 
-  let res = await fetch(
-    `https://soundly-peach.vercel.app/api/search/${value}`,
-    {
-      cache: "no-cache",
-      method: "POST",
-    }
-  );
+  let res = await fetch(`http://localhost:3000/api/search/${value}`, {
+    cache: "no-cache",
+    method: "POST",
+  });
 
   let data: { artists: IArtist[]; songs: ISong[] } = await res.json();
 

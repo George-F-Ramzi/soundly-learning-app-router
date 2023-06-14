@@ -10,16 +10,13 @@ export default function AuthFollow({ id }: { id: number }) {
   useEffect(() => {
     setLoading(true);
     const api = async () => {
-      let Res = await fetch(
-        `https://soundly-peach.vercel.app/api/followed/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": token!,
-          },
-        }
-      );
+      let Res = await fetch(`http://localhost:3000/api/followed/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token!,
+        },
+      });
       if (!Res.ok) throw Error();
 
       let data = await Res.json();
@@ -45,7 +42,7 @@ export default function AuthFollow({ id }: { id: number }) {
       <button
         onClick={async () => {
           setFollowed(true);
-          await fetch(`https://soundly-peach.vercel.app/api/follow/${id}`, {
+          await fetch(`http://localhost:3000/api/follow/${id}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -63,7 +60,7 @@ export default function AuthFollow({ id }: { id: number }) {
     <button
       onClick={async () => {
         setFollowed(false);
-        await fetch(`https://soundly-peach.vercel.app/api/unfollow/${id}`, {
+        await fetch(`http://localhost:3000/api/unfollow/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

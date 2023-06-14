@@ -4,7 +4,7 @@ import Comments from "@/components/comments";
 import Like from "@/components/like";
 import PlayButton from "@/components/play";
 import { db } from "@/db/db";
-import { Songs } from "@/db/schema";
+import { Artists, Songs, Comments as CommentsDB } from "@/db/schema";
 import { IComment, ISong } from "@/utils/types";
 import { eq } from "drizzle-orm";
 import { Metadata } from "next";
@@ -31,11 +31,32 @@ export async function generateMetadata({
 export default async function SongPage({ params }: { params: { id: string } }) {
   let { id } = params;
 
-  let res = await fetch(`https://soundly-peach.vercel.app/api/song/${id}`, {
-    cache: "no-cache",
-  });
+  let song = await db
+    .select({
+      id: Songs.id,
+      username: Artists.name,
+      cover: Songs.cover,
+      song: Songs.song,
+      likes: Songs.likes,
+      name: Songs.name,
+      artist: Songs.artist,
+    })
+    .from(Songs)
+    .where(eq(Songs.id, Number(id)))
+    .leftJoin(Artists, eq(Artists.id, Songs.artist));
 
-  let data: { info: ISong; comments: IComment[] } = await res.json();
+  let comments = await db
+    .select({
+      id: CommentsDB.id,
+      song: CommentsDB.song,
+      artist: CommentsDB.artist,
+      details: CommentsDB.details,
+      name: Artists.name,
+      cover: Artists.cover,
+    })
+    .from(CommentsDB)
+    .where(eq(CommentsDB.song, Number(id)))
+    .leftJoin(Artists, eq(CommentsDB.artist, Artists.id));
 
   return (
     <main className="mt-16 pb-36 text-white">
@@ -45,22 +66,22 @@ export default async function SongPage({ params }: { params: { id: string } }) {
           width={100}
           alt="song cover"
           className="min-w-[100px]  max-h-[100px] rounded mb-10"
-          src={data.info.cover}
+          src={song[0].cover}
         />
         <h1 className="font-bold tablet:text-xl text-5xl mb-7">
-          {data.info.name}
+          {song[0].name}
         </h1>
         <div className="flex">
           <p className="text-base tablet:text-sm  font-bold text-gray-300">
-            {data.info.likes}:Likes
+            {song[0].likes}:Likes
           </p>
         </div>
       </div>
       <div className="mt-14 w-full h-12 grid grid-cols-2 gap-6">
-        <PlayButton data={data.info} />
-        <Like id={data.info.id} />
+        <PlayButton data={song[0] as ISong} />
+        <Like id={song[0].id} />
       </div>
-      <Comments data={data.comments} id={data.info.id} />
+      <Comments data={comments as IComment[]} id={song[0].id} />
     </main>
   );
 }

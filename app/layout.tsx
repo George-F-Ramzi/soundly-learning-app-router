@@ -5,7 +5,10 @@ import Player from "@/components/player";
 import Join from "@/components/join";
 import { Analytics } from "@vercel/analytics/react";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "Soundly",
