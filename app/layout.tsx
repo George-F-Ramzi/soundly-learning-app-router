@@ -1,9 +1,9 @@
 import NavBar from "@/components/nav_bar";
-import "./globals.css";
 import { Inter } from "next/font/google";
 import Player from "@/components/player";
 import Join from "@/components/join";
 import { Analytics } from "@vercel/analytics/react";
+import "./output.css";
 
 const inter = Inter({
   subsets: ["latin"],
