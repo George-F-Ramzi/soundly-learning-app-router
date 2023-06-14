@@ -1,5 +1,3 @@
-"use server";
-
 import Follow from "@/components/follow";
 import SongsSection from "@/components/songs_section";
 import { db } from "@/db/db";

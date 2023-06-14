@@ -1,5 +1,3 @@
-"use server";
-
 import Comments from "@/components/comments";
 import Like from "@/components/like";
 import PlayButton from "@/components/play";

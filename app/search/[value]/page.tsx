@@ -1,5 +1,3 @@
-"use server";
-
 import ArtistsSection from "@/components/artists_section";
 import SongsSection from "@/components/songs_section";
 import { db } from "@/db/db";
