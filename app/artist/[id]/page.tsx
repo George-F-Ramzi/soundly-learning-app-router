@@ -14,6 +14,8 @@ interface Prop {
   params: { id: string };
 }
 
+export const fetchCache = "default-no-store";
+
 export async function generateMetadata({ params }: Prop): Promise<Metadata> {
   let { id } = params;
 

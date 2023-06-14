@@ -2,25 +2,41 @@
 
 import ArtistsSection from "@/components/artists_section";
 import SongsSection from "@/components/songs_section";
+import { db } from "@/db/db";
+import { Artists, Songs } from "@/db/schema";
 import { IArtist, ISong } from "@/utils/types";
+import { eq } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 
-interface IData {
-  discover: ISong[];
-  popular: IArtist[];
-}
+export const revalidate = 10;
 
 export default async function Home() {
-  let response = await fetch("https://soundly-peach.vercel.app/api/home", {
-    next: { revalidate: 10 },
-  });
+  let artists = await db
+    .select({
+      id: Artists.id,
+      name: Artists.name,
+      followers: Artists.followers,
+      following: Artists.follwoing,
+      songs: Artists.songs,
+      cover: Artists.cover,
+    })
+    .from(Artists)
+    .limit(9);
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  let data: IData = await response.json();
+  let discover = await db
+    .select({
+      id: Songs.id,
+      username: Artists.name,
+      cover: Songs.cover,
+      song: Songs.song,
+      likes: Songs.likes,
+      name: Songs.name,
+      artist: Songs.artist,
+    })
+    .from(Songs)
+    .leftJoin(Artists, eq(Artists.id, Songs.artist))
+    .limit(9);
 
   return (
     <main className="mt-20 pb-36  ">
@@ -42,8 +58,8 @@ export default async function Home() {
           src="https://res.cloudinary.com/dwnvkwrox/image/upload/v1680784794/Landing_Image_q59zvq.png"
         />
       </section>
-      <SongsSection title={"Discover"} data={data.discover} />
-      <ArtistsSection title={"Popular Artists"} data={data.popular} />
+      <SongsSection title={"Discover"} data={discover as ISong[]} />
+      <ArtistsSection title={"Popular Artists"} data={artists as IArtist[]} />
     </main>
   );
 }

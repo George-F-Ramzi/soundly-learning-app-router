@@ -10,6 +10,8 @@ import { eq } from "drizzle-orm";
 import { Metadata } from "next";
 import Image from "next/image";
 
+export const fetchCache = "default-no-store";
+
 export async function generateMetadata({
   params,
 }: {

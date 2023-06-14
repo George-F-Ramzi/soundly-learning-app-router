@@ -11,6 +11,8 @@ interface Prop {
   params: { value: string };
 }
 
+export const fetchCache = "default-no-store";
+
 export default async function SearchPage({ params }: Prop) {
   let { value } = params;
 
