@@ -16,4 +16,4 @@ Soundly is a music-sharing platform aiming to deliver the best user experience a
 
 //
 
-## You Can Try The Project From [Here][https://soundly-peach.vercel.app/]
+## You Can Try The Project From [Here](https://soundly-peach.vercel.app/)
